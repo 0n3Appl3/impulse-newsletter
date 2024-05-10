@@ -61,14 +61,14 @@
   opacity: 0;
   transform: translateY(-300px);
 }
-@media screen and (max-width: 1300px) {
-	.portrait {
-		right: 1%;
-	}
-}
 @media screen and (max-width: 1000px) {
-	.portrait {
-		right: -15%;
+	.preview-one {
+		height: 50%;
+		top: -30%;
+	}
+	.preview-two {
+		height: 50%;
+		bottom: -30%;
 	}
 }
 @media screen and (max-width: 700px) {

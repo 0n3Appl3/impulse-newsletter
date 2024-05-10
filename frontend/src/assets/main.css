@@ -13,6 +13,7 @@ h1 {
   text-transform: lowercase;
   font-size: 3rem;
   font-weight: bold;
+  line-height: 95%;
   color:#303030;
   margin-bottom: 1rem;
 }
