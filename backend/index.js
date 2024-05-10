@@ -46,10 +46,14 @@ app.all('*', (req, res) => {
 /*
  * Setup listener and connect to database.
  */
-https.createServer({
-    key: fs.readFileSync(process.env.KEY),
-    cert: fs.readFileSync(process.env.CERT),
-}, app).listen(port, async (req, res) => {
+// https.createServer({
+//     key: fs.readFileSync(process.env.KEY),
+//     cert: fs.readFileSync(process.env.CERT),
+// }, app).listen(port, async (req, res) => {
+//     console.log(`Impulse Newsletter back-end system listening on port ${ port }`)
+//     await connectDb()
+// })
+app.listen(port, async (req, res) => {
     console.log(`Impulse Newsletter back-end system listening on port ${ port }`)
     await connectDb()
 })

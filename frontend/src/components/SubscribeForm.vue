@@ -6,11 +6,29 @@ const status = ref('')
 
 const emailFormat: RegExp = new RegExp(/([a-zA-Z0-9_.+-]+)@[a-zA-Z0-9_.+-]+\.[a-zA-Z0-9_.+-]/)
 
-const attemptSubmit = (event: Event) => {
+const attemptSubmit = async (event: Event) => {
     status.value = ''
     if (emailFormat.test(email.value) === false) {
         event.preventDefault()
         status.value = 'Enter your email address in the correct format. e.g. name@email.com'
+        return
+    }
+    const doesEmailExist = await fetch("http://localhost:3001/api/v1/email/" + email.value)
+    if (doesEmailExist.ok) {
+        event.preventDefault()
+        status.value = 'This email is already subscribed to the newsletter.'
+        return
+    }
+    const addEmail = await fetch("http://localhost:3001/api/v1/email/", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email: email.value })
+    })
+    if (addEmail.ok) {
+        status.value = 'Email added'
         return
     }
 }

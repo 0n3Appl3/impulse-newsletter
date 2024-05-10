@@ -16,7 +16,7 @@ exports.doesEmailExist = async (req, res) => {
     try {
         const email = await Email.findOne({
             where: {
-                email: req.body.email,
+                email: req.params.email,
             }
         })
         if (!email) {
@@ -38,6 +38,7 @@ exports.doesEmailExist = async (req, res) => {
 }
 
 exports.addEmail = async (req, res) => {
+    console.log(req.body)
     try {
         const email = await Email.create({
             email: req.body.email
