@@ -1,4 +1,5 @@
 import smtplib
+import requests
 from email.mime.text import MIMEText
 from bs4 import BeautifulSoup
 
@@ -46,6 +47,11 @@ message['From'] = sender_name
 message['To'] = receiver_email
 
 def main():
+    URL = "http://localhost:3001/api/v1/email/all"
+    get_all_emails_request = requests.get(url = URL)
+    emails = get_all_emails_request.json()
+    # Temp: Check that the script can call the API endpoint to retreive all subscribers
+    print(emails)
     with smtplib.SMTP_SSL(smtp_server, port) as server:
         server.login(sender_email, sender_app_password)
         server.sendmail(sender_email, receiver_email, message.as_string())
