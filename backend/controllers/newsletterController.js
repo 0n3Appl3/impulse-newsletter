@@ -23,9 +23,6 @@ exports.addNewsletter = async (req, res) => {
 exports.setNewsletterPosted = async (req, res) => {
     try {
         const newsletter = await Newsletter.findOne({
-            order: [
-                ['id', 'DESC'],
-            ],
             where: {
                 posted: false,
             }
@@ -53,9 +50,6 @@ exports.setNewsletterPosted = async (req, res) => {
 exports.getOldestUnpostedNewsletter = async (req, res) => {
     try {
         const newsletter = await Newsletter.findOne({
-            order: [
-                ['id', 'DESC'],
-            ],
             where: {
                 posted: false,
             }

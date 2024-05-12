@@ -4,9 +4,6 @@ from email.mime.text import MIMEText
 from bs4 import BeautifulSoup
 
 # TODO
-# - Check for unsent newsletters (newsletter API)
-# - Get newsletter content (newsletter API)
-# - Allow ability to set newsletter header image
 # - Display email sending progress
 # - Schedule main function daily at 08:00
 
@@ -18,6 +15,15 @@ SMTP_SERVER = "smtp.gmail.com"
 SENDER_NAME = "Impulse Newsletter"
 SENDER_EMAIL = "automail.newsletter@gmail.com"
 SENDER_APP_PASSWORD = "<password>"
+
+# Links
+UNSUBSCRIBE_LINK = "http://localhost:5173/unsubscribe?email="
+API_LINK = "http://localhost:3001/api/v1"
+
+# API Endpoints
+ALL_EMAILS_ENDPOINT = API_LINK + "/email/all"
+SET_SENT_ENDPOINT = API_LINK + "/newsletter/set/posted"
+UNSENT_NEWSLETTER_ENDPOINT = API_LINK + "/newsletter"
 
 # Newsletter template
 template = open('template.html')
@@ -37,8 +43,11 @@ def main():
     """
     Sends a newsletter email to all subscribers.
     """
-    URL = "http://localhost:3001/api/v1/email/all"
-    get_all_emails_request = requests.get(url = URL)
+    content = has_an_unsent_newsletter()
+    if (content == False):
+        return print("No new newsletter to send.")
+
+    get_all_emails_request = requests.get(url = ALL_EMAILS_ENDPOINT)
     response = get_all_emails_request.json()
 
     server = smtplib.SMTP_SSL(SMTP_SERVER, PORT)
@@ -46,15 +55,18 @@ def main():
 
     for recipient in response:
         newsletter_title = email_template.article.p
-        newsletter_title.string = subject
+        newsletter_title.string = content['title']
 
         newsletter_body = email_template.article.div.p
         newsletter_body.clear()
-        newsletter_body.append(BeautifulSoup(text, "html.parser"))
+        newsletter_body.append(BeautifulSoup(content['content'], "html.parser"))
+
+        newsletter_image = email_template.div.img
+        newsletter_image['src'] = content['image']
 
         # Unsubscribe link is created for each recipient
         newsletter_unsubscribe = email_template.footer.p.a
-        newsletter_unsubscribe['href'] = "http://localhost:5173/unsubscribe?email=" + recipient['email']
+        newsletter_unsubscribe['href'] = UNSUBSCRIBE_LINK + recipient['email']
 
         newsletter_content = str(email_template)
 
@@ -67,11 +79,20 @@ def main():
 
         server.sendmail(SENDER_EMAIL, recipient['email'], message.as_string())
 
-def check_for_new_newsletters():
+    set_posted_newsletter_request = requests.get(url = SET_SENT_ENDPOINT)
+    if (set_posted_newsletter_request.status_code != 200):
+        return print("An error has occurred and the newsletter has not been set as posted.")
+
+def has_an_unsent_newsletter():
     """
     Attempts to find a newsletter that has not been sent yet.
     """
-    print("Not yet implemented")
+    get_unsent_newsletters_request = requests.get(url = UNSENT_NEWSLETTER_ENDPOINT)
+    response = get_unsent_newsletters_request.json()
+    
+    if (get_unsent_newsletters_request.status_code == 404):
+        return False
+    return response
 
 if __name__ == "__main__":
     main()
