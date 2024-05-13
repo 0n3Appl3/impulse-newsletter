@@ -50,17 +50,17 @@ def main():
     server = smtplib.SMTP_SSL(SMTP_SERVER, PORT)
     server.login(SENDER_EMAIL, SENDER_APP_PASSWORD)
 
+    newsletter_title = email_template.article.p
+    newsletter_title.string = content['title']
+
+    newsletter_body = email_template.article.div.p
+    newsletter_body.clear()
+    newsletter_body.append(BeautifulSoup(content['content'], "html.parser"))
+
+    newsletter_image = email_template.div.img
+    newsletter_image['src'] = content['image']
+
     for recipient in response:
-        newsletter_title = email_template.article.p
-        newsletter_title.string = content['title']
-
-        newsletter_body = email_template.article.div.p
-        newsletter_body.clear()
-        newsletter_body.append(BeautifulSoup(content['content'], "html.parser"))
-
-        newsletter_image = email_template.div.img
-        newsletter_image['src'] = content['image']
-
         # Unsubscribe link is created for each recipient
         newsletter_unsubscribe = email_template.footer.p.a
         newsletter_unsubscribe['href'] = UNSUBSCRIBE_LINK + recipient['email']
