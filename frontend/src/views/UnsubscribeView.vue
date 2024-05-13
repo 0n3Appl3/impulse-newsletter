@@ -6,7 +6,7 @@ const params = new URLSearchParams(query)
 const email = params.get('email')
 
 onMounted(async () => {
-	await fetch("http://localhost:3001/api/v1/email/" + email, {
+	await fetch("https://appl3pvp.com:3001/api/v1/email/" + email, {
 			method: 'POST',
 			headers: {
 				'Accept': 'application/json',

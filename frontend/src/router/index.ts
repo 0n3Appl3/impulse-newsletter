@@ -5,12 +5,12 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
+      path: '/impulse-newsletter',
       name: 'home',
       component: HomeView
     },
     {
-      path: '/unsubscribe',
+      path: '/impulse-newsletter/unsubscribe',
       name: 'unsubscribe',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
@@ -18,7 +18,7 @@ const router = createRouter({
       component: () => import('../views/UnsubscribeView.vue')
     },
     {
-      path: '/:pathMatch(.*)*',
+      path: '/impulse-newsletter/:pathMatch(.*)*',
       name: 'notfound',
       component: () => import('../views/NotFoundView.vue')
     }

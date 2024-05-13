@@ -13,13 +13,13 @@ const attemptSubmit = async (event: Event) => {
         status.value = 'Enter your email address in the correct format. e.g. name@email.com'
         return
     }
-    const doesEmailExist = await fetch("http://localhost:3001/api/v1/email/" + email.value)
+    const doesEmailExist = await fetch("https://appl3pvp.com:3001/api/v1/email/" + email.value)
     if (doesEmailExist.ok) {
         event.preventDefault()
         status.value = 'This email is already subscribed to the newsletter.'
         return
     }
-    const addEmail = await fetch("http://localhost:3001/api/v1/email/", {
+    const addEmail = await fetch("https://appl3pvp.com:3001/api/v1/email/", {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
