@@ -1,10 +1,10 @@
 import smtplib
 import requests
+from progress.bar import ChargingBar
 from email.mime.text import MIMEText
 from bs4 import BeautifulSoup
 
 # TODO
-# - Display email sending progress
 # - Schedule main function daily at 08:00
 
 # SMTP server details
@@ -33,12 +33,6 @@ email_template = soup.find('section')
 html_start = str(soup)[:str(soup).find(str(email_template))].replace('\n', '')
 html_end = str(soup)[str(soup).find(str(email_template)) + len(str(email_template)):].replace('\n', '')
 
-#########################
-# Temporary
-subject = "The Nature of Choice"
-text = "Ah, choice! The grand illusion that dances before you like a marionette on strings. You see, dear player, your decisions matter—or so you believe. The narrator’s voice guides you, nudging you toward doors, buttons, and existential musings. But is it truly choice when the outcome is predetermined? When the walls echo with laughter, mocking your futile rebellion?<br><br>Observe the branching paths—the tantalizing corridors that beckon. Left or right? Blue or red? Freedom or conformity? You choose, and yet, the threads weave back together, mocking your defiance. The narrator chuckles, for he knows the truth: you are but a rat in his maze, chasing breadcrumbs of agency. The illusion of choice, my dear player, is the cruelest trick of all."
-#########################
-
 def main():
     """
     Sends a newsletter email to all subscribers.
@@ -49,6 +43,9 @@ def main():
 
     get_all_emails_request = requests.get(url = ALL_EMAILS_ENDPOINT)
     response = get_all_emails_request.json()
+
+    bar = ChargingBar("Sending Newsletter", max = len(response))
+    bar.next()
 
     server = smtplib.SMTP_SSL(SMTP_SERVER, PORT)
     server.login(SENDER_EMAIL, SENDER_APP_PASSWORD)
@@ -73,15 +70,17 @@ def main():
         body = html_start + newsletter_content + html_end
 
         message = MIMEText(body, 'html')
-        message['Subject'] = subject
+        message['Subject'] = content['title']
         message['From'] = SENDER_NAME
         message['To'] = recipient['email']
 
         server.sendmail(SENDER_EMAIL, recipient['email'], message.as_string())
+        bar.next()
 
     set_posted_newsletter_request = requests.get(url = SET_SENT_ENDPOINT)
     if (set_posted_newsletter_request.status_code != 200):
-        return print("An error has occurred and the newsletter has not been set as posted.")
+        return print("\nAn error has occurred and the newsletter has not been set as posted.")
+    bar.finish()
 
 def has_an_unsent_newsletter():
     """
