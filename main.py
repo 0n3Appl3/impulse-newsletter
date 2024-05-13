@@ -7,9 +7,6 @@ from progress.bar import ChargingBar
 from email.mime.text import MIMEText
 from bs4 import BeautifulSoup
 
-# TODO
-# - Schedule main function daily at 08:00
-
 # SMTP server details
 PORT = 465
 SMTP_SERVER = "smtp.gmail.com"
@@ -20,8 +17,8 @@ SENDER_EMAIL = "automail.newsletter@gmail.com"
 SENDER_APP_PASSWORD = "<password>"
 
 # Links
-UNSUBSCRIBE_LINK = "http://localhost:5173/unsubscribe?email="
-API_LINK = "http://localhost:3001/api/v1"
+UNSUBSCRIBE_LINK = "https://jeddlupoy.com/impulse-newsletter/unsubscribe?email="
+API_LINK = "https://appl3pvp.com:3001/api/v1"
 
 # API Endpoints
 ALL_EMAILS_ENDPOINT = API_LINK + "/email/all"
@@ -86,7 +83,7 @@ def main():
     set_posted_newsletter_request = requests.get(url = SET_SENT_ENDPOINT)
     if (set_posted_newsletter_request.status_code != 200):
         return print("\n[{}] An error has occurred and the newsletter has not been set as posted".format(get_current_date_time()))
-    print("\n[{}] Newsletter sent to all subscribers".format(get_current_date_time()))
+    print("\n[{}] Newsletter sent to {} subscribers".format(get_current_date_time(), len(response)))
     bar.finish()
 
 def has_an_unsent_newsletter():
