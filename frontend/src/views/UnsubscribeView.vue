@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 
-const query = window.location.search
+const query = window.location.hash.replace('#/unsubscribe', '')
 const params = new URLSearchParams(query)
 const email = params.get('email')
 
 onMounted(async () => {
+	console.log(query)
 	await fetch("https://appl3pvp.com:3001/api/v1/email/" + email, {
 			method: 'POST',
 			headers: {

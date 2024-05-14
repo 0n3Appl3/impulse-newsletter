@@ -1,16 +1,16 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/impulse-newsletter',
+      path: '/',
       name: 'home',
       component: HomeView
     },
     {
-      path: '/impulse-newsletter/unsubscribe',
+      path: '/unsubscribe',
       name: 'unsubscribe',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
@@ -18,7 +18,7 @@ const router = createRouter({
       component: () => import('../views/UnsubscribeView.vue')
     },
     {
-      path: '/impulse-newsletter/:pathMatch(.*)*',
+      path: '/:pathMatch(.*)*',
       name: 'notfound',
       component: () => import('../views/NotFoundView.vue')
     }

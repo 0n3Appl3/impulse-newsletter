@@ -17,7 +17,7 @@ SENDER_EMAIL = "automail.newsletter@gmail.com"
 SENDER_APP_PASSWORD = "<password>"
 
 # Links
-UNSUBSCRIBE_LINK = "https://jeddlupoy.com/impulse-newsletter/unsubscribe?email="
+UNSUBSCRIBE_LINK = "https://appl3pvp.com/impulse/#/unsubscribe?email="
 API_LINK = "https://appl3pvp.com:3001/api/v1"
 
 # API Endpoints
