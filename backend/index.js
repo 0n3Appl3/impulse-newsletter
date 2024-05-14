@@ -11,6 +11,7 @@ const emailRoutes = require('./routes/emailRoutes')
 const newsletterRoutes = require('./routes/newsletterRoutes')
 const app = express()
 const port = process.env.PORT
+const localPort = process.env.LOCAL_PORT
 
 /*
  * REST API endpoint naming properties.
@@ -53,7 +54,6 @@ https.createServer({
     console.log(`Impulse Newsletter back-end system listening on port ${ port }`)
     await connectDb()
 })
-// app.listen(port, async (req, res) => {
-//     console.log(`Impulse Newsletter back-end system listening on port ${ port }`)
-//     await connectDb()
-// })
+app.listen(localPort, async (req, res) => {
+    console.log(`Localhost listening on port ${ localPort }`)
+})

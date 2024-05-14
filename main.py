@@ -18,12 +18,17 @@ SENDER_APP_PASSWORD = "<password>"
 
 # Links
 UNSUBSCRIBE_LINK = "https://appl3pvp.com/impulse/#/unsubscribe?email="
-API_LINK = "https://appl3pvp.com:3001/api/v1"
+API_LINK = "http://localhost:3002/api/v1"
 
 # API Endpoints
 ALL_EMAILS_ENDPOINT = API_LINK + "/email/all"
 SET_SENT_ENDPOINT = API_LINK + "/newsletter/set/posted"
 UNSENT_NEWSLETTER_ENDPOINT = API_LINK + "/newsletter"
+
+HEADERS = requests.utils.default_headers()
+HEADERS.update({
+    'User-Agent': 'My User Agent 1.0',
+})
 
 # Newsletter template
 template = open('template.html')
@@ -41,7 +46,7 @@ def main():
     if (content == False):
         return print("[{}] No new newsletter to send".format(get_current_date_time()))
 
-    get_all_emails_request = requests.get(url = ALL_EMAILS_ENDPOINT)
+    get_all_emails_request = requests.get(url = ALL_EMAILS_ENDPOINT, headers = HEADERS)
     response = get_all_emails_request.json()
 
     bar = ChargingBar("Sending Newsletter", max = len(response))
@@ -80,7 +85,7 @@ def main():
         server.sendmail(SENDER_EMAIL, recipient['email'], message.as_string())
         bar.next()
 
-    set_posted_newsletter_request = requests.get(url = SET_SENT_ENDPOINT)
+    set_posted_newsletter_request = requests.get(url = SET_SENT_ENDPOINT, headers = HEADERS)
     if (set_posted_newsletter_request.status_code != 200):
         return print("\n[{}] An error has occurred and the newsletter has not been set as posted".format(get_current_date_time()))
     print("\n[{}] Newsletter sent to {} subscribers".format(get_current_date_time(), len(response)))
@@ -90,7 +95,7 @@ def has_an_unsent_newsletter():
     """
     Attempts to find a newsletter that has not been sent yet.
     """
-    get_unsent_newsletters_request = requests.get(url = UNSENT_NEWSLETTER_ENDPOINT)
+    get_unsent_newsletters_request = requests.get(url = UNSENT_NEWSLETTER_ENDPOINT, headers = HEADERS)
     response = get_unsent_newsletters_request.json()
     
     if (get_unsent_newsletters_request.status_code == 404):
